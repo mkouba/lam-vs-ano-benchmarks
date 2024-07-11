@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.acme.lam.test.MyBeanTest;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.CompilerControl;
 import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
@@ -30,6 +31,7 @@ public class MyBeanLamBenchmark {
         val = ThreadLocalRandom.current().nextInt(1000);
     }
 
+    @CompilerControl(CompilerControl.Mode.DONT_INLINE)
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @Warmup(iterations = 3, time = 1)
@@ -43,6 +45,7 @@ public class MyBeanLamBenchmark {
         return result;
     }
 
+    @CompilerControl(CompilerControl.Mode.DONT_INLINE)
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @Warmup(iterations = 3, time = 1)

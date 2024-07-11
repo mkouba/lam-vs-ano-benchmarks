@@ -32,7 +32,10 @@ runBenchmark() {
     cd ../
 }
 
-# First we run the benchmarks and then charts are genereated
+# First remove previous results
+rm -rf results
+mkdir results
+# Next run the benchmarks
 for countKey in "${!counts[@]}"
 do
     count=${counts[$countKey]}
@@ -42,5 +45,6 @@ do
     generateBeans "lam" $count
     runBenchmark "lam" $count $batch
 done
+# Then charts are genereated
 plotCharts
 
