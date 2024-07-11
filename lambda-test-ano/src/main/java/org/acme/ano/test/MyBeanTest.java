@@ -13,16 +13,16 @@ import org.acme.ano.beans.MyBean9;
 
 public class MyBeanTest {
 
-    private final MyBean0 myBean0 = new MyBean0();
-    private final MyBean1 myBean1 = new MyBean1();
-    private final MyBean2 myBean2 = new MyBean2();
-    private final MyBean3 myBean3 = new MyBean3();
-    private final MyBean4 myBean4 = new MyBean4();
-    private final MyBean5 myBean5 = new MyBean5();
-    private final MyBean6 myBean6 = new MyBean6();
-    private final MyBean7 myBean7 = new MyBean7();
-    private final MyBean8 myBean8 = new MyBean8();
-    private final MyBean9 myBean9 = new MyBean9();
+    private MyBean0 myBean0 = new MyBean0();
+    private MyBean1 myBean1 = new MyBean1();
+    private MyBean2 myBean2 = new MyBean2();
+    private MyBean3 myBean3 = new MyBean3();
+    private MyBean4 myBean4 = new MyBean4();
+    private MyBean5 myBean5 = new MyBean5();
+    private MyBean6 myBean6 = new MyBean6();
+    private MyBean7 myBean7 = new MyBean7();
+    private MyBean8 myBean8 = new MyBean8();
+    private MyBean9 myBean9 = new MyBean9();
 
     public int ping(int val) {
         val = new MyBean0().ping(val).get();

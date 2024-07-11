@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.util.Comparator;
 
 import io.quarkus.qute.Engine;
-import io.quarkus.qute.EngineBuilder;
 import io.quarkus.qute.Template;
 
 public class generate {
@@ -54,7 +53,7 @@ public class generate {
             public class MyBeanTest {
 
                 {#for i in beanCount}
-                private final MyBean{i_index} myBean{i_index} = new MyBean{i_index}();
+                private MyBean{i_index} myBean{i_index} = new MyBean{i_index}();
                 {/for}
 
                 public int ping(int val) {

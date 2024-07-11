@@ -3,15 +3,19 @@ package org.acme.ano;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import org.acme.ano.test.MyBeanTest;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
@@ -21,6 +25,11 @@ public class MyBeanAnoBenchmark {
     int val = 0;
 
     MyBeanTest test = new MyBeanTest();
+
+    @Setup(Level.Iteration)
+    public void setup() {
+        val = ThreadLocalRandom.current().nextInt(1000);
+    }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
