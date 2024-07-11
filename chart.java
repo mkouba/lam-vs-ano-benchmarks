@@ -31,6 +31,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * JBang script to create some charts from the files stored in the results directory.
+ */
 public class chart {
 
     public static void main(String... args) throws IOException {
@@ -71,7 +74,7 @@ public class chart {
             String fileName = file.getFileName().toString();
             String seriesName = fileName.contains("-lam") ? "Lambda" : "Anonymous";
             // results-ano-10.json -> 10
-            String beanCount = fileName.substring(fileName.lastIndexOf("-") + 1, fileName.lastIndexOf("."));
+            String beanCount = padZeros(fileName.substring(fileName.lastIndexOf("-") + 1, fileName.lastIndexOf(".")));
             Series series = seriesMap.get(seriesName);
             if (series == null) {
                 series = new Series(seriesName, new ArrayList<>());
@@ -126,6 +129,13 @@ public class chart {
         try (Reader reader = Files.newBufferedReader(inputFile.toPath(), Charset.forName("UTF-8"))) {
             return JsonParser.parseReader(reader);
         }
+    }
+
+    static String padZeros(String val) {
+        if (val.length() >= 4) {
+            return val;
+        }
+        return "0".repeat(4 - val.length()) + val;
     }
 
     record Series(String name, List<SeriesData> data) {

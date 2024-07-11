@@ -1,11 +1,13 @@
 #!/bin/bash
+# Bash script to run some benchmarks based on the configuration
+
 # Benchmark configuration
-WARMUP_ITERATIONS=2
-ITERATIONS=2
-# Numbers of generate beans
-counts=(1 10)
+WARMUP_ITERATIONS=3
+ITERATIONS=5
+# Numbers of generated beans
+counts=(5 50 100)
 # Corresponding batch sizes
-batches=(100000 100000)
+batches=(100000 10000 1000)
 
 generateBeans() {
     local testType=$1

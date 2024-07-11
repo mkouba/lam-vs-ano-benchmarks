@@ -9,6 +9,9 @@ import java.util.Comparator;
 import io.quarkus.qute.Engine;
 import io.quarkus.qute.Template;
 
+/**
+ * JBang script to generate some beans.
+ */
 public class generate {
 
     static String lamTemplate = """
