@@ -1,23 +1,44 @@
-#!/bin/sh
-COUNT="10"
-BATCH=10000
+#!/bin/bash
+# Benchmark configuration
+WARMUP_ITERATIONS=2
+ITERATIONS=2
+# Numbers of generate beans
+counts=(1 10)
+# Corresponding batch sizes
+batches=(100000 100000)
 
-# Generate beans with anonymous classes
-./generate.java ano $COUNT lambda-test-ano/src/main/java/org/acme/ano/
+generateBeans() {
+    local testType=$1
+    local dirName="lambda-test-${testType}"
+    local count=$2
+    ./generate.java $testType $count "${dirName}/src/main/java/org/acme/${testType}/"
+}
 
-cd lambda-test-ano
-mvn clean package
-java -jar target/lambda-test-ano-1.0.0-SNAPSHOT.jar -bs $BATCH -wbs $BATCH -rf json -rff ../results-ano.json
-java -jar target/lambda-test-ano-1.0.0-SNAPSHOT.jar -bs $BATCH -wbs $BATCH -f 1 -prof gc -rf json -rff ../results-ano-gc.json
-cd ../
+plotCharts() {
+    ./chart.java results
+}
 
-# Generate beans with lambdas
-./generate.java lam $COUNT lambda-test-lam/src/main/java/org/acme/lam/
-cd lambda-test-lam
-mvn clean package
-java -jar target/lambda-test-lam-1.0.0-SNAPSHOT.jar -bs $BATCH -wbs $BATCH -rf json -rff ../results-lam.json
-java -jar target/lambda-test-lam-1.0.0-SNAPSHOT.jar -bs $BATCH -wbs $BATCH -f 1 -prof gc -rf json -rff ../results-lam-gc.json
-cd ../
+runBenchmark() {
+    local testType=$1
+    local dirName="lambda-test-${1}"
+    local count=$2
+    local batch=$3
+    cd $dirName
+    mvn clean package
+    java -jar "target/lambda-test-${testType}-1.0.0-SNAPSHOT.jar" -i $ITERATIONS -wi $WARMUP_ITERATIONS -bs $batch -wbs $batch -rf json -rff "../results/results-${testType}-${count}.json"
+    java -jar "target/lambda-test-${testType}-1.0.0-SNAPSHOT.jar" -i $ITERATIONS -wi $WARMUP_ITERATIONS -bs $batch -wbs $batch -f 1 -prof gc -rf json -rff "../results/results-${testType}-gc-${count}.json"
+    cd ../
+}
 
-# Generate chart
-./chart.java results-ano.json results-lam.json results-lam-gc.json results-ano-gc.json
+# First we run the benchmarks and then charts are genereated
+for countKey in "${!counts[@]}"
+do
+    count=${counts[$countKey]}
+    batch=${batches[$countKey]}
+    generateBeans "ano" $count
+    runBenchmark "ano" $count $batch
+    generateBeans "lam" $count
+    runBenchmark "lam" $count $batch
+done
+plotCharts
+

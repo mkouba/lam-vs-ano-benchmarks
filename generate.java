@@ -57,23 +57,21 @@ public class generate {
                 private final MyBean{i_index} myBean{i_index} = new MyBean{i_index}();
                 {/for}
 
-                public int ping() {
-                    int val = 0;
+                public int ping(int val) {
                     {#for i in beanCount}
                     val = new MyBean{i_index}().ping(val).get();
                     {/for}
                     return val;
                 }
 
-                public int pingStateful() {
-                    int val = 0;
+                public int pingStateful(int val) {
                     {#for i in beanCount}
                     val = this.myBean{i_index}.ping(val).get();
                     {/for}
                     return val;
                 }
 
-                public int getExpectedResult() {
+                public int getBeanCount() {
                     return {beanCount};
                 }
 

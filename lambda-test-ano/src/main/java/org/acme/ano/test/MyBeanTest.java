@@ -24,8 +24,7 @@ public class MyBeanTest {
     private final MyBean8 myBean8 = new MyBean8();
     private final MyBean9 myBean9 = new MyBean9();
 
-    public int ping() {
-        int val = 0;
+    public int ping(int val) {
         val = new MyBean0().ping(val).get();
         val = new MyBean1().ping(val).get();
         val = new MyBean2().ping(val).get();
@@ -39,8 +38,7 @@ public class MyBeanTest {
         return val;
     }
 
-    public int pingStateful() {
-        int val = 0;
+    public int pingStateful(int val) {
         val = this.myBean0.ping(val).get();
         val = this.myBean1.ping(val).get();
         val = this.myBean2.ping(val).get();
@@ -54,7 +52,7 @@ public class MyBeanTest {
         return val;
     }
 
-    public int getExpectedResult() {
+    public int getBeanCount() {
         return 10;
     }
 

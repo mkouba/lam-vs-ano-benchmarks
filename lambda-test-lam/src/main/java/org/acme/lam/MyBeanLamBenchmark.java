@@ -15,11 +15,24 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
+@State(Scope.Benchmark)
 public class MyBeanLamBenchmark {
 
-    @State(Scope.Benchmark)
-    public static class TestState {
-        final MyBeanTest test = new MyBeanTest();
+    int val = 0;
+
+    MyBeanTest test = new MyBeanTest();
+
+    @Benchmark
+    @BenchmarkMode(Mode.Throughput)
+    @Warmup(iterations = 3, time = 1)
+    @Measurement(iterations = 5, time = 1)
+    @Fork(3)
+    public int stateless() {
+        int result = test.ping(val);
+        if ((val + test.getBeanCount()) != result) {
+            throw new IllegalStateException("Unexpected result: " + result);
+        }
+        return result;
     }
 
     @Benchmark
@@ -27,23 +40,12 @@ public class MyBeanLamBenchmark {
     @Warmup(iterations = 3, time = 1)
     @Measurement(iterations = 5, time = 1)
     @Fork(3)
-    public void stateless(TestState state) {
-        int result = state.test.ping();
-        if (state.test.getExpectedResult() != result) {
+    public int stateful() {
+        int result = test.pingStateful(val);
+        if ((val + test.getBeanCount()) != result) {
             throw new IllegalStateException("Unexpected result: " + result);
         }
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.Throughput)
-    @Warmup(iterations = 3, time = 1)
-    @Measurement(iterations = 5, time = 1)
-    @Fork(3)
-    public void stateful(TestState state) {
-        int result = state.test.pingStateful();
-        if (state.test.getExpectedResult() != result) {
-            throw new IllegalStateException("Unexpected result: " + result);
-        }
+        return result;
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -55,15 +57,14 @@ public class MyBeanLamBenchmark {
         long sleep = Long.parseLong(args[2]);
 
         MyBeanLamBenchmark benchmark = new MyBeanLamBenchmark();
-        TestState state = new TestState();
 
         if (type.equals("stateless")) {
             for (int i = 0; i < loop; i++) {
-                benchmark.stateless(state);
+                benchmark.stateless();
             }
         } else {
             for (int i = 0; i < loop; i++) {
-                benchmark.stateful(state);
+                benchmark.stateful();
             }
         }
 
